@@ -34,12 +34,20 @@ export class User extends Component {
     //const { noteTable } = this.state;
     const { classes } = this.props;
     const data = [{
-      name: 'Tanner Linsley',
-      age: 26,
-      friend: {
-        name: 'Jason Maurer',
-        age: 23,
-      }
+      date: "2018-02-23",
+      cate: "Auto",
+      model: "Ford",
+      detail: "F302"
+    },{
+      date: "2018-02-23",
+      cate: "Auto",
+      model: "Ford",
+      detail: "F302"
+    },{
+      date: "2018-02-23",
+      cate: "Auto",
+      model: "Ford",
+      detail: "F302"
     }]
 
     const columns = [{
