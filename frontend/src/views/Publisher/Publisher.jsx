@@ -8,6 +8,7 @@ import Table from "components/Table/Table.jsx";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
+import * as DataService from "service/dataService.jsx"
 
 const styles = {
   cardCategoryWhite: {
@@ -45,6 +46,12 @@ const accounts = [
 
 function Publisher(props) {
   const { classes } = props;
+  DataService.getTable((result) => {
+    console.log("result",result.rows)
+    this.setState({ noteTable: result.rows })
+  }, (err) => {
+    console.log(err)
+  });
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>

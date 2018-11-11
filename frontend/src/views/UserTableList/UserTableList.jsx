@@ -8,6 +8,7 @@ import Table from "components/Table/Table.jsx";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
+import * as DataService from "service/dataService.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 
@@ -42,39 +43,55 @@ const styles = {
 };
 
 function loadTableData() {
-  return [
-    ["Dakota Rice", "Niger", "Oud-Turnhout", "$36,738"],
-    ["Minerva Hooper", "Curaçao", "Sinaai-Waas", "$23,789"],
-    ["Sage Rodriguez", "Netherlands", "Baileux", "$56,142"],
-    ["Philip Chaney", "Korea, South", "Overland Park", "$38,735"],
-    ["Doris Greene", "Malawi", "Feldkirchen in Kärnten", "$63,542"],
-    ["Mason Porter", "Chile", "Gloucester", "$78,615"]
-  ]
+  //DataService.getTable().;
+  return new Promise((resolve, reject)=>{
+    setTimeout(() => {
+      console.log("wait!");
+      resolve([
+       [" Rice", "Niger", "Oud-Turnhout", "$36,738"],
+       ["Minerva Hooper", "Curaçao", "Sinaai-Waas", "$23,789"],
+       ["Sage Rodriguez", "Netherlands", "Baileux", "$56,142"],
+       ["Philip Chaney", "Korea, South", "Overland Park", "$38,735"],
+       ["Doris Greene", "Malawi", "Feldkirchen in Kärnten", "$63,542"],
+       ["Mason Porter", "Chile", "Gloucester", "$78,615"]
+     ])
+   }, 500);
+  });
 }
 
-function TableList(props) {
-  const { classes } = props;
-  return (
-    <GridContainer>
-      <GridItem xs={12} sm={12} md={12}>
-        <Card>
-          <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>User Activities</h4>
-            <p className={classes.cardCategoryWhite}>
-              Activities
-            </p>
-          </CardHeader>
-          <CardBody>
-            <Table
-              tableHeaderColor="primary"
-              tableHead={["Date", "Category", "Model", "Detail", "Delete"]}
-              tableData={loadTableData()}
-            />
-          </CardBody>
-        </Card>
-      </GridItem>
-    </GridContainer>
-  );
+class TableList extends React.Component {
+  state = { tableData: [] };
+
+  async componentDidMount() {
+    const tableData = await loadTableData();
+    this.setState({ tableData });
+  }
+
+  render() {
+    //console.log(this.props); 
+    const { classes } = this.props;
+    return (
+      <GridContainer>
+        <GridItem xs={12} sm={12} md={12}>
+          <Card>
+            <CardHeader color="primary">
+              <h4 className={classes.cardTitleWhite}>User Activities</h4>
+              <p className={classes.cardCategoryWhite}>
+                Activities
+              </p>
+            </CardHeader>
+            <CardBody>
+              <Table
+                tableHeaderColor="primary"
+                tableHead={["Date", "Category", "Model", "Detail", "Delete"]}
+                tableData={this.state.tableData}
+              />
+            </CardBody>
+          </Card>
+        </GridItem>
+      </GridContainer>
+    );
+  }
 }
 
 export default withStyles(styles)(TableList);
