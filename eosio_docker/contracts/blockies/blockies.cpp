@@ -3,11 +3,10 @@
 using namespace eosio;
 using namespace std;
 
-//
 // API use cases
 
 // PHASE I
-// 1. Publisher: Recording intent data
+// 1. Publisher: Logging intent data
 // 2. User: Taking over their ID and claiming it as an EOS user ID
 // 3. User: Fetching all data that's stored about me
 // 4. User: Deleting a record that's stored about me
@@ -21,9 +20,9 @@ class [[eosio::contract]] blockies : public eosio::contract {
     using contract::contract;
 
     blockies( name receiver, name code, datastream<const char*> ds ):
-                contract( receiver, code, ds ),
-                _intents( receiver, receiver.value ),
-                _users( receiver, receiver.value ) {}
+      contract( receiver, code, ds ),
+      _intents( receiver, receiver.value ),
+      _users( receiver, receiver.value ) {}
 
     // ********************
     // PUBLISHER-FACING API
@@ -34,7 +33,18 @@ class [[eosio::contract]] blockies : public eosio::contract {
     [[eosio::action]]
     void log( name publisher, uint64_t userFingerprint, std::string& intentCategory, std::string& intentSubCategory, std::string& intentDetail) {
       require_auth( publisher );
-      // TODO
+
+      //uint64_t intentCounter = _get_intent_counter();
+      _intents.emplace(publisher, [&](auto& row) {
+        row.prim_key = _intents.available_primary_key();
+        row.fingerprint = userFingerprint;
+        row.publisher = publisher;
+        row.intentCategory = intentCategory;
+        row.intentSubCategory = intentSubCategory;
+        row.intentDetail = intentDetail;
+        row.timestamp = current_time();
+      });
+      //_update_intent_counter(intentCounter);
     }
 
     // ***************
@@ -51,7 +61,7 @@ class [[eosio::contract]] blockies : public eosio::contract {
       if ( iterator == _users.end() )
       {
         // The fingerprint isn't in the table - store it associated with the user
-        _users.emplace(user, [&](auto& row ) {
+        _users.emplace(user, [&](auto& row) {
           row.fingerprint = fingerprint;
           row.user = user;
         });
@@ -64,9 +74,30 @@ class [[eosio::contract]] blockies : public eosio::contract {
     }
 
     [[eosio::action]]
-    void remove(name user, std::string& intentCategory, std::string& intentSubCategory, std::string& intentDetail) {
-      require_auth( user );
-      // TODO
+    void remove(uint64_t fingerprint, std::string& intentCategory, std::string& intentSubCategory, std::string& intentDetail) {
+      // require_auth( user ); // Future: Accept user and require authority of it
+      
+      // Query by fingerprint, iterate and delete the stuff that matches the given spec
+      // Future: Support partial matches (e.g. delete all intents under a sub-category)
+      
+      auto idx = _intents.get_index<name("getbyfp")>();
+      auto iter = idx.lower_bound(fingerprint);
+
+      while (iter != idx.end() && iter->fingerprint == fingerprint &&
+       (iter->intentCategory != intentCategory ||
+       iter->intentSubCategory != intentSubCategory ||
+       iter->intentDetail != intentDetail)) {
+        iter++;
+      }
+
+      if (iter != idx.end() && iter->fingerprint == fingerprint &&
+       iter->intentCategory == intentCategory &&
+       iter->intentSubCategory == intentSubCategory &&
+       iter->intentDetail == intentDetail) {
+        auto pkIter = _intents.find(iter->prim_key);
+        eosio_assert(pkIter != _intents.end(), "Well, this is odd. Found the intent record by secondary index but not by its primary.");
+        _intents.erase( pkIter );
+      }
     }
 
     // ********************
@@ -88,9 +119,9 @@ class [[eosio::contract]] blockies : public eosio::contract {
     // This table records all of the collected data (intents) about a user fingerprint
     // We are using the contract scope for this because we want to be able to query for all of the users at once
     struct [[eosio::table]] intents {
-      uint64_t      prim_key;  // primary key
-      name          user;      // account name for the user
-      name          publisher; // account name for the publisher
+      uint64_t      prim_key;     // primary key
+      uint64_t      fingerprint;  // fingerprint value (user identifier)
+      name          publisher;    // account name for the publisher
 
       // Intent hierarchic details
       std::string   intentCategory;
@@ -105,13 +136,13 @@ class [[eosio::contract]] blockies : public eosio::contract {
       // Secondary keys
       // Supported: uint64_t, uint128_t, uint256_t, double or long double
 
-      uint64_t get_by_user() const { return user.value; }
+      uint64_t get_by_fp() const { return fingerprint; }
       uint64_t get_by_pub() const { return publisher.value; }
     };
 
     typedef eosio::multi_index< name("intents"), intents,
-      indexed_by< name("getbyuser"),
-        const_mem_fun<intents, uint64_t, &intents::get_by_user>
+      indexed_by< name("getbyfp"),
+        const_mem_fun<intents, uint64_t, &intents::get_by_fp>
       >,
       indexed_by< name("getbypub"),
         const_mem_fun<intents, uint64_t, &intents::get_by_pub>
