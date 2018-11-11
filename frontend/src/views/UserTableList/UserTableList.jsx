@@ -43,7 +43,20 @@ const styles = {
 };
 
 function loadTableData() {
-  //DataService.getTable().;
+  let formatted = []
+  return new Promise((resolve, reject) => {
+    DataService.getTable((data) => {
+      data.map((row, index) => {
+        formatted.push([]);
+        row.forEach((value) => {
+          formatted[index].push(value);
+        });
+      });
+      resolve(formatted);
+    });
+  });
+
+  /*
   return new Promise((resolve, reject)=>{
     setTimeout(() => {
       console.log("wait!");
@@ -57,6 +70,7 @@ function loadTableData() {
      ])
    }, 500);
   });
+  */
 }
 
 class TableList extends React.Component {

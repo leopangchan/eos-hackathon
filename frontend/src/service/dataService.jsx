@@ -14,7 +14,6 @@ export function getTable(cb, errCb) {
 //         resolve(temp_data);
 //     });
 
-//   return promise
     rpc.get_table_rows({
       "json": true,
       "code": "blockies",   // contract who owns the table
