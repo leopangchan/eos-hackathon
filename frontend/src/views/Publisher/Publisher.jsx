@@ -38,8 +38,12 @@ const styles = {
     }
   }
 };
+const accounts = [
+  {"name":"Kelly Blue Book", "privateKey":"5K7mtrinTFrVTduSxizUc5hjXJEtTjVTsqSHeBHes1Viep86FP5", "publicKey":"EOS6kYgMTCh1iqpq9XGNQbEi8Q6k5GujefN9DSs55dcjVyFAq7B6b"},
+  {"name":"Jessica Jones", "privateKey":"5KLqT1UFxVnKRWkjvhFur4sECrPhciuUqsYRihc1p9rxhXQMZBg", "publicKey":"EOS78RuuHNgtmDv9jwAzhxZ9LmC6F295snyQ9eUDQ5YtVHJ1udE6p"},
+];
 
-function TableList(props) {
+function Publisher(props) {
   const { classes } = props;
   return (
     <GridContainer>
@@ -71,4 +75,4 @@ function TableList(props) {
   );
 }
 
-export default withStyles(styles)(TableList);
+export default withStyles(styles)(Publisher);

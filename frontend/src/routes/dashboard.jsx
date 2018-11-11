@@ -1,5 +1,5 @@
 
-import TableList from "views/TableList/TableList.jsx";
+import Publisher from "views/Publisher/Publisher.jsx";
 import UserTableList from "../views/UserTableList/UserTableList";
 
 const dashboardRoutes = [
@@ -29,7 +29,7 @@ const dashboardRoutes = [
     sidebarName: "Publisher",
     navbarName: "Publisher Table List",
     icon: "content_paste",
-    component: TableList
+    component: Publisher
   },
   /*,
   {
