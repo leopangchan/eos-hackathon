@@ -67,14 +67,10 @@ function TableList(props) {
           <CardBody>
             <Table
               tableHeaderColor="primary"
-              tableHead={["Date", "Category", "Model", "Detail"]}
+              tableHead={["Date", "Category", "Model", "Detail", "Delete"]}
               tableData={loadTableData()}
             />
           </CardBody>
-          <CardFooter>
-            <Button color="primary">Update Profile</Button>
-            <Button color="primary">Delete Data</Button>
-          </CardFooter>
         </Card>
       </GridItem>
     </GridContainer>
