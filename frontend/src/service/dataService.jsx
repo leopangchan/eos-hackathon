@@ -14,10 +14,11 @@ export function getTable(cb, errCb) {
 //         resolve(temp_data);
 //     });
 
+//   return promise
     rpc.get_table_rows({
       "json": true,
-      "code": "blockies",   // contract who owns the table
-      "scope": "blockies",  // scope of the table
+      "code": "blockiesacc",   // contract who owns the table
+      "scope": "blockiesacc",  // scope of the table
       "table": "intents",    // name of the table as specified by the contract abi
       "limit": 100,
     })
