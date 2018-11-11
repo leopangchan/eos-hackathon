@@ -24,7 +24,8 @@ function sendToBlockchain(genre, category, detail) {
 
   // send to blockchain logic
   let message = "No response yet";
-  const defaultPrivateKey = "5K7mtrinTFrVTduSxizUc5hjXJEtTjVTsqSHeBHes1Viep86FP5"; // useraaaaaaaa
+  // should not be in production
+  const defaultPrivateKey = "5KL4jcyX2Gg2YGCktpdYfgVAvzThpD3yFKf7zbs9sYhWsA6bp6J";
   const rpc = new eosjs_jsonrpc.default('http://127.0.0.1:8888');
   const signatureProvider = new eosjs_jssig.default([defaultPrivateKey]);
   const api = new eosjs_api.default({ rpc, signatureProvider });
@@ -33,17 +34,18 @@ function sendToBlockchain(genre, category, detail) {
     try {
       const result = await api.transact({
         actions: [{
-          account: 'eosio.token',
-          name: 'transfer',
+          account: 'blockiesacc',
+          name: 'log',
           authorization: [{
-            actor: 'useraaaaaaaa',
+            actor: 'publisher1',
             permission: 'active',
           }],
           data: {
-            from: 'useraaaaaaaa',
-            to: 'useraaaaaaab',
-            quantity: '0.0001 SYS',
-            memo: '',
+            publisher: 'publisher1',
+            userFingerprint: 1,
+            intentCategory: dataArray[0],
+            intentSubCategory: dataArray[1],
+            intentDetail: dataArray[2]
           },
         }]
       }, {
