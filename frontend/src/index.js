@@ -1,34 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { UIRouter, UIView, pushStateLocationPlugin } from '@uirouter/react';
-import Index from './pages/publisher';
-import User from './pages/user'
+import React from "react";
+import ReactDOM from "react-dom";
+import { createBrowserHistory } from "history";
+import { Router, Route, Switch } from "react-router-dom";
 
-// define your states
-const states = [
-  {
-    name: 'publisher',
-    url: '/publisher',
-    component: Index,
-  },
-  {
-    name: "user",
-    url: "/user",
-    component: User
-  },
-  {
-    name: "home",
-    url: "/",
-    component: Index
-  }
-];
+import "assets/css/material-dashboard-react.css?v=1.5.0";
 
-// select your plugins
-const plugins = [pushStateLocationPlugin];
+import indexRoutes from "routes/index.jsx";
+
+const hist = createBrowserHistory();
 
 ReactDOM.render(
-  <UIRouter plugins={plugins} states={states}>
-    <UIView />
-  </UIRouter>,
-  document.getElementById('root'),
+  <Router history={hist}>
+    <Switch>
+      {indexRoutes.map((prop, key) => {
+        return <Route path={prop.path} component={prop.component} key={key} />;
+      })}
+    </Switch>
+  </Router>,
+  document.getElementById("root")
 );
