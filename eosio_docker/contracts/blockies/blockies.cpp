@@ -79,48 +79,14 @@ class [[eosio::contract]] blockies : public eosio::contract {
       // Future implementation
     }
 
-/*
-    [[eosio::action]]
-    void update( name user, std::string& note ) {
-      // to sign the action with the given account
-      require_auth( user );
-
-      // create new / update note depends whether the user account exist or not
-      if (isnewuser(user)) {
-        // insert new note
-        _notes.emplace( _self, [&]( auto& new_user ) {
-          new_user.prim_key    = _notes.available_primary_key();
-          new_user.user        = user;
-          new_user.note        = note;
-          new_user.timestamp   = now();
-        });
-      } else {
-        // get object by secordary key
-        auto note_index = _notes.get_index<name("getbyuser")>();
-        auto &note_entry = note_index.get(user.value);
-        // update existing note
-        _notes.modify( note_entry, _self, [&]( auto& modified_user ) {
-          modified_user.note      = note;
-          modified_user.timestamp = now();
-        });
-      }
-    }*/
-
   private:
-    /*
-    bool isnewuser( name user ) {
-      // get notes by using secordary key
-      auto note_index = _notes.get_index<name("getbyuser")>();
-      auto note_iterator = note_index.find(user.value);
-
-      return note_iterator == note_index.end();
-    }*/
 
     // *************
     // INTENTS TABLE
     // *************
 
     // This table records all of the collected data (intents) about a user fingerprint
+    // We are using the contract scope for this because we want to be able to query for all of the users at once
     struct [[eosio::table]] intents {
       uint64_t      prim_key;  // primary key
       name          user;      // account name for the user
