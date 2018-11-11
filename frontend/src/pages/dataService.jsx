@@ -33,7 +33,7 @@ export function deleteRecord(finger_pt, cate1, cate2, cate3, cb, errCb) {
     rpc.delete_table_record({
       "json": true,
       "finger_print": finger_pt,  
-      "cate2": cate1,  
+      "cate1": cate1,  
       "cate2": cate2,  
       "cate3":cate3,
       "limit": 100,
