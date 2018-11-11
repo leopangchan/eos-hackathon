@@ -66,25 +66,53 @@ class Index extends Component {
 
   render() { 
     const { classes } = this.props;
-    function getDataTable() {
-      if(dataTable)
-      var data = this.state.noteTable;
-      console.log(data);
-      
-      for(let i = 0; i < data.length; i++) {
-        dataTable.push([])
-        Object.keys(data[i]).forEach(function(key) {
-          console.log('Key : ' + key + ', Value : ' + data[key])
-          dataTable[i].push( data[key]) 
-        })
-        console.log("dataTable[i]",dataTable[i])
-      }
-      return dataTable;
-    //var dataTable: [] 
+    var data = this.state.noteTable;
+    let title = ""
+    console.log(data);
+    let dataTable = []
+       for(let i = 0; i < data.length; i++) {
+      dataTable.push([])
+      Object.keys(data[i]).forEach(function(key) {
+        console.log('Key : ' + key + ', Value : ' + data[i][key])
+        dataTable[i].push( data[i][key]) 
+      })
+      console.log("dataTable[i]",dataTable[i])
     }
+    // data.map((row, i) =>
+    // dataTable.push([])
+    // Object.keys(row).forEach(function(key) {
+    //   console.log('Key : ' + key + ', Value : ' + data[key])
+    //   dataTable[i].push( data[key]) 
+    // }))
+    // title= row.publisher);
+
+    // for(let i = 0; i < data.length; i++) {
+    //   dataTable.push([])
+      // Object.keys(data[i]).forEach(function(key) {
+      //   console.log('Key : ' + key + ', Value : ' + data[key])
+      //   dataTable[i].push( data[key]) 
+      // })
+    //   console.log("dataTable[i]",dataTable[i])
+    // }
+    // function getDataTable() {
+    //   if(dataTable)
+    //   var data = this.state.noteTable;
+    //   console.log(data);
+      
+    //   for(let i = 0; i < data.length; i++) {
+    //     dataTable.push([])
+    //     Object.keys(data[i]).forEach(function(key) {
+    //       console.log('Key : ' + key + ', Value : ' + data[key])
+    //       dataTable[i].push( data[key]) 
+    //     })
+    //     console.log("dataTable[i]",dataTable[i])
+    //   }
+    //   return dataTable;
+    // //var dataTable: [] 
+    // }
     
 
-    console.log("table_",dataTable)
+    // console.log("table_",dataTable)
     // const columns = [{
     //   Header: 'User Identity',
     //   accessor: 'fingerprint' // String-based value accessors!
@@ -112,8 +140,8 @@ class Index extends Component {
             <CardBody>
               <Table
                 tableHeaderColor="primary"
-                tableHead={["No.", "User Identity", "Category", "Type of Vehicle","dfdsfd","fdsgfdhgf","safdgg"]}
-                tableData={getDataTable()}
+                tableHead={["No.", "User Identity", "Category", "Type of Vehicle","Detail","SubCategory","Timestamp"]}
+                tableData={dataTable}
               />
             </CardBody>
           </Card>
