@@ -4,10 +4,12 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^1.5.1",
+    "@uirouter/react": "^0.8.7",
     "eosjs": "20.0.0-beta2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-scripts": "^1.1.5",
+    "react-table": "^6.8.6",
     "text-encoding": "^0.7.0"
   },
   "scripts": {
