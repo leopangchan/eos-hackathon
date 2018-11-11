@@ -121,7 +121,7 @@ class Index extends Component {
 
   componentDidMount() {
     DataService.getTable((result) => {
-      console.log("result",result)
+      console.log("result",result.rows)
       this.setState({ noteTable: result.rows })
     }, (err) => {
       console.log(err)
