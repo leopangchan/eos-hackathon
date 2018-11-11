@@ -14,6 +14,9 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 
+import ReactTable from "react-table";
+import 'react-table/react-table.css'
+
 // eosio endpoint
 const endpoint = "http://localhost:8888";
 
@@ -31,11 +34,11 @@ const accounts = [
 // set up styling classes using material-ui "withStyles"
 const styles = theme => ({
   card: {
-    margin: 20,
+    margin: 40,
   },
   paper: {
     ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
+    paddingTop: theme.spacing.unit * 4,
     paddingBottom: theme.spacing.unit * 2,
   },
   formButton: {
@@ -128,6 +131,7 @@ class Index extends Component {
     });
   }
 
+  /*
   render() {
     const { noteTable } = this.state;
     const { classes } = this.props;
@@ -203,6 +207,48 @@ class Index extends Component {
       </div>
     );
   }
+  */
+
+ render() { 
+  const { classes } = this.props; 
+  var data = this.state.noteTable
+  var title = ""
+  data.map((row, i) =>
+    title= row.publisher);
+
+  const columns = [{
+    Header: 'User Identity',
+    accessor: 'fingerprint' // String-based value accessors!
+  }, {
+    Header: 'Category',
+    accessor: 'intentCategory',
+    Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+  }, {
+    Header: 'Type of Vehicle',
+    accessor: "intentSubCategory"
+  }, {
+    Header: 'Detail',
+    accessor: "intentDetail"
+  }]
+
+  return (
+    <div>
+      <AppBar position="static" color="default">
+          <Toolbar>
+            <Typography variant="title" color="inherit">
+            {title}
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      <Paper className={classes.paper}>
+        <ReactTable
+          data={data}
+          columns={columns}
+        />
+      </Paper>
+    </div>
+  );
+}
 
 }
 
