@@ -104,7 +104,8 @@ function getCategoryModel(path) {
 
 const path = window.location.pathname;
 console.log('window path:', path);
-
+if (window.location.hostname === "www.kbb.com") {
+console.log('running function');
 if(path === "/") {
   localCategory = "N/A";
   localDetail = "N/A";
@@ -121,5 +122,6 @@ if(path === "/") {
 }
 
 sendToBlockchain(localGenre, localCategory, localDetail);
+}
 
 console.log('content script active');

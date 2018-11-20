@@ -42,17 +42,51 @@ const styles = {
   }
 };
 
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp / 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  return time;
+}
+
+function sortByKey(array, key) {
+    return array.sort(function(a, b) {
+        var x = a[key]; var y = b[key];
+        return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+    });
+}
+
 function loadTableData() {
   let formatted = []
   return new Promise((resolve, reject) => {
     DataService.getTable((data) => {
-      data.map((row, index) => {
+      data.rows = sortByKey(data.rows, "timestamp")
+      data.rows.map((row, index) => {
         formatted.push([]);
-        row.forEach((value) => {
-          formatted[index].push(value);
+        Object.keys(row).forEach((key) => {
+          if (key !== "fingerprint" && key !== "prim_key"){
+            let value = row[key];
+            if (key === "timestamp") {
+               console.log(row[key])
+               console.log(new Date(+row[key]));
+               const date = new Date(+row[key]).toString();
+               value = timeConverter(+row[key]);
+            } 
+            formatted[index].push(value);
+          }
         });
       });
       resolve(formatted);
+    }, err => {
+      console.log(JSON.stringify(err));
+      console.log(err.message);
+      reject(err);
     });
   });
 
@@ -76,7 +110,7 @@ function loadTableData() {
 class TableList extends React.Component {
   state = { tableData: [] };
 
-  async componentDidMount() {
+  async componentWillMount() {
     const tableData = await loadTableData();
     this.setState({ tableData });
   }
@@ -97,7 +131,7 @@ class TableList extends React.Component {
             <CardBody>
               <Table
                 tableHeaderColor="primary"
-                tableHead={["Date", "Category", "Model", "Detail", "Delete"]}
+                tableHead={["Publisher", "Category", "Model", "Detail", "Date", "Delete"]}
                 tableData={this.state.tableData}
               />
             </CardBody>

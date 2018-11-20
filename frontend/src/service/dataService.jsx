@@ -20,7 +20,7 @@ export function getTable(cb, errCb) {
       "code": "blockiesacc",   // contract who owns the table
       "scope": "blockiesacc",  // scope of the table
       "table": "intents",    // name of the table as specified by the contract abi
-      "limit": 100,
+      "limit": 1000,
     })
     .then(cb)
     .catch(errCb);
